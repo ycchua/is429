@@ -9,36 +9,53 @@
     <input type='text' id='caseid' placeholder='Case'>
     <input type='text' id='nameInput' placeholder='Name'>
     <input type='text' id='messageInput' placeholder='Message'>
+    <button onclick="myFunction()">Ask here</button>
     <div id='messagesDiv'></div>
     
     <b>Assist someone here</b><br/>
     <input type='text' id='caseidA' placeholder='Case'>
     <input type='text' id='nameInputA' placeholder='Name'>
-    <input type='text' id='messageInputA' placeholder='Message'>
+    <input type='text' id='messageInputA' onkeypress="myFunction(this)" placeholder='Message'>
+    <input type='button' id='enterbutton' value='Answer here'>
     <div id='ansDiv'></div>
     <script>
       var myDataRef = new Firebase('https://ycchua.firebaseio.com/');
-      $('#messageInput').keypress(function (e) {
-        if (e.keyCode == 13) {
-          var caseid = $('#caseid').val();
-          var name = $('#nameInput').val();
-          var text = $('#messageInput').val();
-          myDataRef.push({caseid: caseid, name: name, text: text});
-          $('#messageInput').val('');
-        }
-      });
+      //$('#messageInput').onclick=myfunction() {
+      //  if (e.keyCode == 13) {
+      //    var caseid = $('#caseid').val();
+      //    var name = $('#nameInput').val();
+      //    var text = $('#messageInput').val();
+      //    myDataRef.push({caseid: caseid, name: name, text: text});
+      //    $('#messageInput').val('');
+      //  }
+      //});
       myDataRef.on('child_added', function(snapshot) {
         var message = snapshot.val();
         displayChatMessage(message.name, message.text, message.caseid);
       });
       function displayChatMessage(name, text, caseid) {
-        $('#messagesDiv').append("Case : <label>" + caseid + "</label><br/>")
-        $('<div style="display:inline"/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-        $('#messagesDiv').append("<input id='check_" +  caseid + "' type='checkbox'/><br/>");
+        $('#messagesDiv').append("<div id='div_" + caseid + "' />");
+        var container = $("#div_" + caseid);
+        
+        container.append("Case : <label>" + caseid + "</label><br/>")
+        $('<div style="display:inline"/>').text(text).prepend($('<em/>').text(name+': ')).appendTo(container);
+         container.append("<button onclick='removeElem(this)'>Remove</button><br/>");
         $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
       };
+      
+      function myFunction()
+      {
+          var caseid = $('#caseid').val();
+          var name = $('#nameInput').val();
+          var text = $("#messageInput").val();
+          myDataRef.push({caseid: caseid, name: name, text: text});
+          $('#messageInput').val('');
+          alert("HH");
+      }
 
-
+    function removeElem(elem) {
+      $(elem).parent().remove();
+    }
       //Answers are here
       var myDataRef1 = new Firebase('https://ycchuahelper.firebaseio.com/');
       $('#messageInput').keypress(function (e) {
