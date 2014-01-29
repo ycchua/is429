@@ -4,7 +4,7 @@
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
   </head>
   <body>
-    
+    <b>MediLink</b><br/>
     <b>Enter your question here</b> <br/>
     <input type='text' id='caseid' placeholder='Case'>
     <input type='text' id='nameInput' placeholder='Name'>
@@ -16,8 +16,10 @@
     <input type='text' id='caseidA' placeholder='Case'>
     <input type='text' id='nameInputA' placeholder='Name'>
     <input type='text' id='messageInputA' placeholder='Message'>
-    <button onclick="myFunction1()">Answer Here</button>
-    <div id='ansDiv'></div>
+    <button onclick="window.location='http://ycchua.github.io/is429/history.html';">Answer Here</button><br/>
+    
+    <button onclick="visitHist()">View History</button>
+    
     <script>
       var myDataRef = new Firebase('https://ycchua.firebaseio.com/');
       myDataRef.on('child_added', function(snapshot) {
@@ -30,7 +32,7 @@
         
         container.append("Case : <label>" + caseid + "</label><br/>")
         $('<div style="display:inline"/>').text(text).prepend($('<em/>').text(name+': ')).appendTo(container);
-         container.append("<button onclick='removeElem(this)'>Remove</button><br/>");
+         container.append("<button onclick='removeElem(this)'>Resolved</button><br/>");
         $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
       };
       
@@ -43,38 +45,28 @@
          // $('#messageInput').val('');
       }
 
-    function removeElem(elem) {
-      $(elem).parent().remove();
-      myDataRef.remove();
-    }
-      //Answers are here
-      var myDataRef1 = new Firebase('https://ycchuahelper.firebaseio.com/');
-      myDataRef1.on('child_added', function(snapshot) {
-        var message1 = snapshot.val();
-        displayChatMessage1(message1.nameA, message1.textA, message1.caseidA);
-      });
-      function displayChatMessage1(nameA, textA, caseidA) {
-        $('#ansDiv').append("<div id='div_" + caseidA + "' />");
-        var containerA = $("#div1" + caseidA);
-        containerA.append("Case : <label>" + caseidA + "</label><br/>")
-        $('<div style="display:inline"/>').text(textA).prepend($('<em/>').text(nameA+': ')).appendTo(containerA);
-         containerA.append("<button onclick='removeElem1(this)'>Remove</button><br/>");
-        $('#ansDiv')[0].scrollTop = $('#ansDiv')[0].scrollHeight;
-      };
-      
-      function myFunction1()
+      function removeElem(elem) {
+        var history =  $(elem).parent().text();
+        $(elem).parent().remove();
+        myDataRef.remove();
+        var myDataRef1 =  new Firebase('https://ycchuahistory.firebaseio.com');
+        myDataRef1.push({history: history});
+      }
+
+      function myHelp()
       {
           var caseidA = $('#caseidA').val();
-          var nameA = $('#nameInputA').val();
+          var nameA = "HELPER"+$('#nameInputA').val();
           var textA = $("#messageInputA").val();
-          myDataRef1.push({caseidA: caseidA, nameA: nameA, textA: textA});
+          myDataRef.push({caseid: caseidA, name: nameA, text: textA});
           $('#messageInput').val('');
       }
       
-      function removeElem1(elem) {
-      $(elem).parent().remove();
-      myDataRef1.remove();
-    }
+      function viewHist(){
+        
+      }
+
+
     </script>
 
   </body>
