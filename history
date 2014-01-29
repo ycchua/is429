@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+  </head>
+  <body>
+    <b>HISTORY</b><br/>
+    <button onclick="removeElem()">Clear DataBase</button><br/>
+    <div id='messagesDiv'></div>
+    <button onclick="window.location='http://ycchua.github.io/is429/';">Back to forum</button>
+    <script>
+      var myDataRef = new Firebase('https://ycchuahistory.firebaseio.com/');
+     
+      myDataRef.on('child_added', function(snapshot) {
+        var message = snapshot.val();
+        displayChatMessage(message.history);
+      });
+      function displayChatMessage(name, text) {
+        $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+        $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+      };
+      
+      function removeElem() {
+        myDataRef.remove();
+      }
+      
+    </script>
+  </body>
+</html>
