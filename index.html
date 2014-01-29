@@ -15,20 +15,11 @@
     <b>Assist someone here</b><br/>
     <input type='text' id='caseidA' placeholder='Case'>
     <input type='text' id='nameInputA' placeholder='Name'>
-    <input type='text' id='messageInputA' onkeypress="myFunction(this)" placeholder='Message'>
-    <input type='button' id='enterbutton' value='Answer here'>
+    <input type='text' id='messageInputA' placeholder='Message'>
+    <button onclick="myFunction1()">Answer Here</button>
     <div id='ansDiv'></div>
     <script>
       var myDataRef = new Firebase('https://ycchua.firebaseio.com/');
-      //$('#messageInput').onclick=myfunction() {
-      //  if (e.keyCode == 13) {
-      //    var caseid = $('#caseid').val();
-      //    var name = $('#nameInput').val();
-      //    var text = $('#messageInput').val();
-      //    myDataRef.push({caseid: caseid, name: name, text: text});
-      //    $('#messageInput').val('');
-      //  }
-      //});
       myDataRef.on('child_added', function(snapshot) {
         var message = snapshot.val();
         displayChatMessage(message.name, message.text, message.caseid);
@@ -49,34 +40,41 @@
           var name = $('#nameInput').val();
           var text = $("#messageInput").val();
           myDataRef.push({caseid: caseid, name: name, text: text});
-          $('#messageInput').val('');
-          alert("HH");
+         // $('#messageInput').val('');
       }
 
     function removeElem(elem) {
       $(elem).parent().remove();
+      myDataRef.remove();
     }
       //Answers are here
       var myDataRef1 = new Firebase('https://ycchuahelper.firebaseio.com/');
-      $('#messageInput').keypress(function (e) {
-        if (e.keyCode == 13) {
-          var caseidA = $('#caseid').val();
-          var nameA = $('#nameInput').val();
-          var textA = $('#messageInput').val();
-          myDataRef1.push({caseid: caseidA, name: nameA, text: textA});
-          $('#messageInput').val('');
-        }
-      });
       myDataRef1.on('child_added', function(snapshot) {
-        var message = snapshot.val();
-        displayChatMessage1(message.nameA, message.textA, message.caseidA);
+        var message1 = snapshot.val();
+        displayChatMessage1(message1.nameA, message1.textA, message1.caseidA);
       });
       function displayChatMessage1(nameA, textA, caseidA) {
-        $('#ansDiv').append("Case : <label>" + caseidA + "</label><br/>")
-        $('<div style="display:inline"/>').text(textA).prepend($('<em/>').text(nameA+': ')).appendTo($('#messagesDiv'));
-        $('#ansDiv').append("<input id='check_" +  caseidA + "' type='checkbox'/><br/>");
+        $('#ansDiv').append("<div id='div_" + caseidA + "' />");
+        var containerA = $("#div1" + caseidA);
+        containerA.append("Case : <label>" + caseidA + "</label><br/>")
+        $('<div style="display:inline"/>').text(textA).prepend($('<em/>').text(nameA+': ')).appendTo(containerA);
+         containerA.append("<button onclick='removeElem1(this)'>Remove</button><br/>");
         $('#ansDiv')[0].scrollTop = $('#ansDiv')[0].scrollHeight;
       };
+      
+      function myFunction1()
+      {
+          var caseidA = $('#caseidA').val();
+          var nameA = $('#nameInputA').val();
+          var textA = $("#messageInputA").val();
+          myDataRef1.push({caseidA: caseidA, nameA: nameA, textA: textA});
+          $('#messageInput').val('');
+      }
+      
+      function removeElem1(elem) {
+      $(elem).parent().remove();
+      myDataRef1.remove();
+    }
     </script>
 
   </body>
