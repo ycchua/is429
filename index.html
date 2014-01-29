@@ -5,6 +5,9 @@
   </head>
   <body>
     <b>MediLink</b><br/>
+    You can ask a question here!<br/>
+    Someone will try to assist you <br/>
+    
     <b>Enter your question here</b> <br/>
     <input type='text' id='caseid' placeholder='Case'>
     <input type='text' id='nameInput' placeholder='Name'>
@@ -16,9 +19,9 @@
     <input type='text' id='caseidA' placeholder='Case'>
     <input type='text' id='nameInputA' placeholder='Name'>
     <input type='text' id='messageInputA' placeholder='Message'>
-    <button onclick="window.location='http://ycchua.github.io/is429/history.html';">Answer Here</button><br/>
+    <button onclick="myHelp()">Answer Here</button><br/>
     
-    <button onclick="visitHist()">View History</button>
+    <button onclick="window.location='http://ycchua.github.io/is429/history.html';">View History</button>
     
     <script>
       var myDataRef = new Firebase('https://ycchua.firebaseio.com/');
@@ -60,10 +63,6 @@
           var textA = $("#messageInputA").val();
           myDataRef.push({caseid: caseidA, name: nameA, text: textA});
           $('#messageInput').val('');
-      }
-      
-      function viewHist(){
-        
       }
 
 
